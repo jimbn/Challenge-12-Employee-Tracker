@@ -1,8 +1,9 @@
 const express = require('express');
 const db = require('./db/connection');
 const inquirer = require('inquirer');
-const res = require('express/lib/response');
-const Connection = require('mysql2/typings/mysql/lib/Connection');
+const mysql = require('mysql');
+let employeeArray = [];
+let rolesArray = [];
 
 
 // First question prompting option
@@ -44,7 +45,7 @@ const initialQuestion = () => {
                 addEmployee();
                 break;
             case 'Update an employee role':
-                UpdateEmployeeRole();
+                updateEmployeeRole();
                 break;
         }
     });
@@ -177,3 +178,34 @@ const addEmployee = () => {
         })
     })
 };
+
+//function to update employee's role
+const updateEmployeeRole = () => {
+    const sql = `SELECT * FROM employee;`
+    db.query(sql,(err,res) => {
+        if (err) throw err;
+    })
+    inquirer.prompt([
+        {
+            type: 'list',
+            message: 'Which employee you would like to update?',
+            choices: employeeArray,
+            name: 'updateEmployee',
+        },
+        {
+            type: 'list',
+            message: 'What is the new role for the selected employee?',
+            choices: rolesArray,
+            name: 'updatedEmployeeRole'
+        }
+    ]).then((answers) => {
+        db.query(`UPDATE role SET title = (?) WHERE employee.first_name = (?)`, 
+        [answers.updatedEmployeeRole, answers.updateEmployee],
+        (err) => {
+            if(err) throw err;
+            console.log('Added new employee');
+            initialQuestion();
+        })
+    })
+}
+
