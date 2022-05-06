@@ -103,15 +103,45 @@ const addDepartment = () => {
             name:'dept'
         }
     ]) .then((answers) => {
-        Connection.query(`INSERT INTO department(name) VALUES (?)`, 
-        { answer.dept }, 
+        db.query(`INSERT INTO department(name) VALUES (?)`, 
+        [answers.dept], 
         (err) => {
             if (err) throw err;
-            console.log('Added new Department')
-            console.table(answers)
+            console.log('Added new department to database.'),
+            console.table(answers),
             initialQuestion()
         })
     })
 };
 
-//function to add roles
+//function to add role
+const addRole = () => {
+    inquirer.prompt([
+        {
+            type: 'input',
+            message: 'What role would you like to add?',
+            name: 'role'
+        },
+        {
+            type: 'input',
+            message: 'what is the salary?',
+            name: 'salary'
+        },
+        {
+            type: 'input',
+            message:'What is the department`s id number?',
+            name: 'roleDept'
+        }
+    ]). then((answers) => {
+        db.query(`INSERT INTO role(title, salary, department_id) VALUES (?,?,?)`, 
+        [answers.role, answers.salary, answers.roleDept], 
+        (err) => {
+            if(err)throw err;
+            console.log('Added new role database.'),
+            console.table(answers),
+            initialQuestion()
+        })
+    })
+}
+
+//function to add employee
