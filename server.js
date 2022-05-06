@@ -107,9 +107,9 @@ const addDepartment = () => {
         [answers.dept], 
         (err) => {
             if (err) throw err;
-            console.log('Added new department to database.'),
-            console.table(answers),
-            initialQuestion()
+            console.log('Added new department to database.');
+            console.table(answers);
+            initialQuestion();
         })
     })
 };
@@ -132,16 +132,48 @@ const addRole = () => {
             message:'What is the department`s id number?',
             name: 'roleDept'
         }
-    ]). then((answers) => {
+    ]).then((answers) => {
         db.query(`INSERT INTO role(title, salary, department_id) VALUES (?,?,?)`, 
         [answers.role, answers.salary, answers.roleDept], 
         (err) => {
-            if(err)throw err;
-            console.log('Added new role database.'),
-            console.table(answers),
-            initialQuestion()
+            if(err) throw err;
+            console.log('Added new role database.');
+            console.table(answers);
+            initialQuestion();
         })
     })
-}
+};
 
 //function to add employee
+const addEmployee = () => {
+    inquirer.prompt([
+        {
+            type: 'input',
+            message: 'What is the first name of the employee?',
+            name: 'firstName'
+        },
+        {
+            type: 'input',
+            message: 'What is the last name of the employee?',
+            name: 'lastName'
+        },
+        {
+            type: 'input',
+            message: 'What is the role id of the employee?',
+            name: 'roleId'
+        },
+        {
+            type: 'input',
+            message: 'What is the manager id of the employee?',
+            name: 'managerId'
+        }
+    ]).then((answers) => {
+        db.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)`,
+        [answers.firstName, answers.lastName, answers.roleId, answers.managerId],
+        (err) => {
+            if(err) throw err;
+            console.log('Added new employee');
+            initialQuestion();
+        })
+    })
+};
