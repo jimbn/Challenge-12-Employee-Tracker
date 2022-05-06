@@ -2,8 +2,23 @@ const express = require('express');
 const db = require('./db/connection');
 const inquirer = require('inquirer');
 const mysql = require('mysql');
+const { exit } = require('process');
+const { appendFile } = require('fs');
 let employeeArray = [];
 let rolesArray = [];
+
+
+const PORT = process.envPORT || 3001;
+const app = express();
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+
+db.connect((err) => {
+    if (err) throw err;
+    console.log('You are connected to the database');
+    initialQuestion();
+});
 
 
 // First question prompting option
@@ -46,6 +61,9 @@ const initialQuestion = () => {
                 break;
             case 'Update an employee role':
                 updateEmployeeRole();
+                break;
+            case 'Exit';
+                exit();
                 break;
         }
     });
@@ -209,3 +227,13 @@ const updateEmployeeRole = () => {
     })
 }
 
+const finish = () => {
+    console.log('Leaving Employee Tracker.');
+    db.end();
+    process.exit();
+
+};
+
+app.listen(PORT, () => {
+    console.log(`You are now on port ${PORT}`);
+});
