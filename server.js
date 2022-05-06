@@ -1,8 +1,24 @@
 const express = require('express');
 const db = require('./db/connection');
 const inquirer = require('inquirer');
-const res = require('express/lib/response');
-const Connection = require('mysql2/typings/mysql/lib/Connection');
+const mysql = require('mysql');
+const { exit } = require('process');
+const { appendFile } = require('fs');
+let employeeArray = [];
+let rolesArray = [];
+
+
+const PORT = process.envPORT || 3001;
+const app = express();
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+
+db.connect((err) => {
+    if (err) throw err;
+    console.log('You are connected to the database');
+    initialQuestion();
+});
 
 
 // First question prompting option
@@ -44,7 +60,10 @@ const initialQuestion = () => {
                 addEmployee();
                 break;
             case 'Update an employee role':
-                UpdateEmployeeRole();
+                updateEmployeeRole();
+                break;
+            case 'Exit';
+                exit();
                 break;
         }
     });
@@ -177,3 +196,44 @@ const addEmployee = () => {
         })
     })
 };
+
+//function to update employee's role
+const updateEmployeeRole = () => {
+    const sql = `SELECT * FROM employee;`
+    db.query(sql,(err,res) => {
+        if (err) throw err;
+    })
+    inquirer.prompt([
+        {
+            type: 'list',
+            message: 'Which employee you would like to update?',
+            choices: employeeArray,
+            name: 'updateEmployee',
+        },
+        {
+            type: 'list',
+            message: 'What is the new role for the selected employee?',
+            choices: rolesArray,
+            name: 'updatedEmployeeRole'
+        }
+    ]).then((answers) => {
+        db.query(`UPDATE role SET title = (?) WHERE employee.first_name = (?)`, 
+        [answers.updatedEmployeeRole, answers.updateEmployee],
+        (err) => {
+            if(err) throw err;
+            console.log('Added new employee');
+            initialQuestion();
+        })
+    })
+}
+
+const finish = () => {
+    console.log('Leaving Employee Tracker.');
+    db.end();
+    process.exit();
+
+};
+
+app.listen(PORT, () => {
+    console.log(`You are now on port ${PORT}`);
+});
