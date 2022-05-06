@@ -2,6 +2,7 @@ const express = require('express');
 const db = require('./db/connection');
 const inquirer = require('inquirer');
 const res = require('express/lib/response');
+const Connection = require('mysql2/typings/mysql/lib/Connection');
 
 
 // First question prompting option
@@ -94,3 +95,23 @@ const viewAllEmployees = () => {
 };
 
 // add department: include validation of value
+const addDepartment = () => {
+    inquirer.prompt([
+        {
+            type: 'input',
+            message: 'What department would you like to add?',
+            name:'dept'
+        }
+    ]) .then((answers) => {
+        Connection.query(`INSERT INTO department(name) VALUES (?)`, 
+        { answer.dept }, 
+        (err) => {
+            if (err) throw err;
+            console.log('Added new Department')
+            console.table(answers)
+            initialQuestion()
+        })
+    })
+};
+
+//function to add roles
