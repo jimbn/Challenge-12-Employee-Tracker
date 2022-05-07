@@ -1,22 +1,36 @@
 const express = require('express');
-const db = require('./db/connection');
 const inquirer = require('inquirer');
-const mysql = require('mysql');
-const { exit } = require('process');
-const { appendFile } = require('fs');
+const cTable = require('console.table');
+const mysql = require('mysql2');
+
 let employeeArray = [];
 let rolesArray = [];
 
 
 const PORT = process.envPORT || 3001;
 const app = express();
-app.use(express.urlencoded({ extended: true }));
+
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+
+// Connect to database
+const db = mysql.createConnection({
+    host: 'localhost',
+    // Your MySQL username,
+    user: 'root',
+    // Your MySQL password
+    password: 'password',
+    database: 'tracker'
+  });
+
 
 
 db.connect((err) => {
     if (err) throw err;
     console.log('You are connected to the database');
+    app.listen(PORT, () => {
+        console.log(`You are now on port ${PORT}`);
+    });
     initialQuestion();
 });
 
@@ -62,7 +76,7 @@ const initialQuestion = () => {
             case 'Update an employee role':
                 updateEmployeeRole();
                 break;
-            case 'Exit';
+            case 'Exit':
                 exit();
                 break;
         }
@@ -71,7 +85,7 @@ const initialQuestion = () => {
 
 // view all Department
 const viewAllDepartments = () => {
-    const sql = `Select * FROM department`
+    const sql = `SELECT * FROM department`
     db.query(sql, (err, res) => {
         if (err) {
             console.log(err);
@@ -227,13 +241,11 @@ const updateEmployeeRole = () => {
     })
 }
 
-const finish = () => {
+const exit = () => {
     console.log('Leaving Employee Tracker.');
     db.end();
     process.exit();
 
 };
 
-app.listen(PORT, () => {
-    console.log(`You are now on port ${PORT}`);
-});
+
