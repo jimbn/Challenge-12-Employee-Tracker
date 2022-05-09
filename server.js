@@ -1,8 +1,8 @@
 const express = require('express');
 const inquirer = require('inquirer');
-const cTable = require('console.table');
+require('console.table');
 const mysql = require('mysql2');
-const rolesArray = [];
+let rolesArray = [];
 
 const PORT = process.envPORT || 3001;
 const app = express();
@@ -105,11 +105,11 @@ const viewAllRoles = () => {
         }
         res.forEach(({ title }) => {
             rolesArray.push(title);
-            console.log('Viewing Roles');
-            console.table(res);
-            initialQuestion();
-            return;
         })
+        console.log('Viewing Roles');
+        console.table(res);
+        initialQuestion();
+        return;
     })
 };
 
@@ -218,6 +218,7 @@ const updateEmployeeRole = () => {
     db.query(sql,(err,res) => {
         if (err) throw err;
         console.table(res);
+        console.table(rolesArray);
     })
     inquirer.prompt([
         {
@@ -231,7 +232,7 @@ const updateEmployeeRole = () => {
             name: 'updatedEmployeeRole'
         }
     ]).then((answers) => {
-        db.query(`UPDATE role SET title = (?) WHERE employee.first_name = (?)`, 
+        db.query(`UPDATE employees SET role_id = (?) WHERE id = (?)`, 
         [answers.updatedEmployeeRole, answers.updateEmployee],
         (err) => {
             if(err) throw err;

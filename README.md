@@ -1,24 +1,43 @@
-# Challenge-12-Employee-Tracker
+# Employee-Tracker
 
-AS A business owner
-I WANT to be able to view and manage the departments, roles, and employees in my company
-SO THAT I can organize and plan my business
+ ![badge](https://img.shields.io/badge/license-MITLicense-brightorange)
+  
+  ## Table of Contents
+  
+-[Licensing](#Licensing)
 
+-[Description](#Description)
 
-GIVEN a command-line application that accepts user input
-WHEN I start the application
-THEN I am presented with the following options: view all departments, view all roles, view all employees, add a department, add a role, add an employee, and update an employee role
-WHEN I choose to view all departments
-THEN I am presented with a formatted table showing department names and department ids
-WHEN I choose to view all roles
-THEN I am presented with the job title, role id, the department that role belongs to, and the salary for that role
-WHEN I choose to view all employees
-THEN I am presented with a formatted table showing employee data, including employee ids, first names, last names, job titles, departments, salaries, and managers that the employees report to
-WHEN I choose to add a department
-THEN I am prompted to enter the name of the department and that department is added to the database
-WHEN I choose to add a role
-THEN I am prompted to enter the name, salary, and department for the role and that role is added to the database
-WHEN I choose to add an employee
-THEN I am prompted to enter the employee’s first name, last name, role, and manager, and that employee is added to the database
-WHEN I choose to update an employee role
-THEN I am prompted to select an employee to update and their new role and this information is updated in the database
+-[Demo](#Demo)
+
+-[Installation](#Installation)
+
+-[Usage](#Usage)
+
+-[Questions](#Questions)
+
+  ## Licensing:
+ 
+  This application uses MIT License.
+
+  For more information please visit the [license description](https://choosealicense.com/licenses/mit/).
+
+  ## Description
+
+  Employee-Tracker is an employee management system, a command line application that manages employee database using Node.JS, Inquirer, and MySQL npms. This application allows user to VIEW, MANAGE, AND UPDATE employees, departments, and roles in the company.
+  
+  ## Demo 
+  
+  [Link to full demo video]()
+
+  ## Installation
+  Follow these steps to properly install this application:
+
+  User must download the repo and run 'npm i' to install all of the necessary packages at the command line. 
+
+  ## Usage 
+  Once packages have been installed, user must run command 'npm start' in the terminal and will be prompted use to a list of options. Once a choice is selected, they will be prompted to fill out new prompts in order to accomplish each task. The results will be added to the database and can be viewed by selecting the viewing option after the change has been made .
+
+  ## Questions
+  Any questions please reach out to me at my [Github](https://github.com/jimbn)
+  
