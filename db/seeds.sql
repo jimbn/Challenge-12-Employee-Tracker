@@ -22,10 +22,12 @@ VALUES
     ('engineer J', 777.99, 1),
     ('engineer J', 777.99, 2),
     ('engineer J', 777.99, 3),
-    ('engineer J', 777.99, 4),
+    ('engineer J', 777.99, 4);
 
-INSERT INTO employee
+INSERT INTO employees
     (first_name, last_name, role_id, manager_id)
 VALUES
-    ('First1', 'Last1', 0),
+    ('First1', 'Last1', 1, 2),
+    ('First2', 'Last2', 0, 4);
+
     

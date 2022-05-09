@@ -2,10 +2,7 @@ const express = require('express');
 const inquirer = require('inquirer');
 const cTable = require('console.table');
 const mysql = require('mysql2');
-
-let employeeArray = [];
-let rolesArray = [];
-
+const rolesArray = [];
 
 const PORT = process.envPORT || 3001;
 const app = express();
@@ -16,9 +13,9 @@ app.use(express.json());
 // Connect to database
 const db = mysql.createConnection({
     host: 'localhost',
-    // Your MySQL username,
+    // MySQL username,
     user: 'root',
-    // Your MySQL password
+    //MySQL password
     password: 'password',
     database: 'tracker'
   });
@@ -99,16 +96,20 @@ const viewAllDepartments = () => {
 
 // view all roles
 const viewAllRoles = () => {
+    rolesArray = []
     const sql = `SELECT * FROM role`
     db.query(sql, (err, res) => {
         if (err) {
             console.log(err);
             return;
         }
-        console.log('Viewing Roles');
-        console.table(res);
-        initialQuestion();
-        return;
+        res.forEach(({ title }) => {
+            rolesArray.push(title);
+            console.log('Viewing Roles');
+            console.table(res);
+            initialQuestion();
+            return;
+        })
     })
 };
 
@@ -201,7 +202,7 @@ const addEmployee = () => {
             name: 'managerId'
         }
     ]).then((answers) => {
-        db.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)`,
+        db.query(`INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)`,
         [answers.firstName, answers.lastName, answers.roleId, answers.managerId],
         (err) => {
             if(err) throw err;
@@ -213,21 +214,20 @@ const addEmployee = () => {
 
 //function to update employee's role
 const updateEmployeeRole = () => {
-    const sql = `SELECT * FROM employee;`
+    const sql = `SELECT * FROM employees;`
     db.query(sql,(err,res) => {
         if (err) throw err;
+        console.table(res);
     })
     inquirer.prompt([
         {
-            type: 'list',
-            message: 'Which employee you would like to update?',
-            choices: employeeArray,
+            type: 'input',
+            message: 'Enter the employee ID of the employee you want to update.',
             name: 'updateEmployee',
         },
         {
-            type: 'list',
-            message: 'What is the new role for the selected employee?',
-            choices: rolesArray,
+            type: 'input',
+            message: 'Enter the id of the role you want to update the employee`s role to.',
             name: 'updatedEmployeeRole'
         }
     ]).then((answers) => {
